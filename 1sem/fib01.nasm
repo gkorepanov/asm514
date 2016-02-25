@@ -17,6 +17,7 @@ Disassembly of section .text:
   22:	b8 00 00 00 00       	mov    eax,0x0
   27:	41 b8 00 00 00 00    	mov    r8d,0x0
   2d:	4e 8d 14 18          	lea    r10,[rax+r11*1]
+                                lea    r11,[r10+r11*3+4]
   31:	f2 42 0f 10 04 d7    	movsd  xmm0,QWORD PTR [rdi+r10*8]
   37:	f2 0f 59 04 c6       	mulsd  xmm0,QWORD PTR [rsi+rax*8]
   3c:	f2 41 0f 58 01       	addsd  xmm0,QWORD PTR [r9]
