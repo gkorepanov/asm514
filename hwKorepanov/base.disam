@@ -1,0 +1,119 @@
+
+base:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+00000000004000b0 <convert>:
+  4000b0:	55                   	push   %rbp
+  4000b1:	48 89 e5             	mov    %rsp,%rbp
+  4000b4:	48 83 ec 64          	sub    $0x64,%rsp
+  4000b8:	48 89 ee             	mov    %rbp,%rsi
+  4000bb:	48 ff ce             	dec    %rsi
+  4000be:	c6 06 0a             	movb   $0xa,(%rsi)
+
+00000000004000c1 <convert.loop>:
+  4000c1:	85 c0                	test   %eax,%eax
+  4000c3:	74 1b                	je     4000e0 <convert.exit>
+  4000c5:	31 d2                	xor    %edx,%edx
+  4000c7:	f7 f3                	div    %ebx
+  4000c9:	83 fa 0a             	cmp    $0xa,%edx
+  4000cc:	72 08                	jb     4000d6 <convert.digit>
+  4000ce:	83 ea 0a             	sub    $0xa,%edx
+  4000d1:	83 c2 41             	add    $0x41,%edx
+  4000d4:	eb 03                	jmp    4000d9 <convert.proceed>
+
+00000000004000d6 <convert.digit>:
+  4000d6:	83 c2 30             	add    $0x30,%edx
+
+00000000004000d9 <convert.proceed>:
+  4000d9:	48 ff ce             	dec    %rsi
+  4000dc:	88 16                	mov    %dl,(%rsi)
+  4000de:	eb e1                	jmp    4000c1 <convert.loop>
+
+00000000004000e0 <convert.exit>:
+  4000e0:	b8 01 00 00 00       	mov    $0x1,%eax
+  4000e5:	bf 01 00 00 00       	mov    $0x1,%edi
+  4000ea:	48 89 ea             	mov    %rbp,%rdx
+  4000ed:	48 29 f2             	sub    %rsi,%rdx
+  4000f0:	0f 05                	syscall 
+  4000f2:	48 89 ec             	mov    %rbp,%rsp
+  4000f5:	5d                   	pop    %rbp
+  4000f6:	c3                   	retq   
+
+00000000004000f7 <read_number>:
+  4000f7:	b8 00 00 00 00       	mov    $0x0,%eax
+  4000fc:	bf 00 00 00 00       	mov    $0x0,%edi
+  400101:	48 be 58 02 60 00 00 	movabs $0x600258,%rsi
+  400108:	00 00 00 
+  40010b:	ba 0a 00 00 00       	mov    $0xa,%edx
+  400110:	0f 05                	syscall 
+  400112:	48 89 c6             	mov    %rax,%rsi
+  400115:	48 83 ee 01          	sub    $0x1,%rsi
+  400119:	48 89 f7             	mov    %rsi,%rdi
+  40011c:	31 db                	xor    %ebx,%ebx
+  40011e:	31 c0                	xor    %eax,%eax
+  400120:	48 31 f6             	xor    %rsi,%rsi
+
+0000000000400123 <read_number.loop>:
+  400123:	48 39 fe             	cmp    %rdi,%rsi
+  400126:	74 21                	je     400149 <read_number.exit>
+  400128:	44 89 c2             	mov    %r8d,%edx
+  40012b:	f7 e2                	mul    %edx
+  40012d:	31 db                	xor    %ebx,%ebx
+  40012f:	8a 9e 58 02 60 00    	mov    0x600258(%rsi),%bl
+  400135:	83 eb 30             	sub    $0x30,%ebx
+  400138:	83 fb 0a             	cmp    $0xa,%ebx
+  40013b:	73 0d                	jae    40014a <nondigit>
+  40013d:	83 fb 00             	cmp    $0x0,%ebx
+  400140:	72 08                	jb     40014a <nondigit>
+  400142:	01 d8                	add    %ebx,%eax
+  400144:	48 ff c6             	inc    %rsi
+  400147:	eb da                	jmp    400123 <read_number.loop>
+
+0000000000400149 <read_number.exit>:
+  400149:	c3                   	retq   
+
+000000000040014a <nondigit>:
+  40014a:	b8 01 00 00 00       	mov    $0x1,%eax
+  40014f:	bf 01 00 00 00       	mov    $0x1,%edi
+  400154:	48 be 37 02 40 00 00 	movabs $0x400237,%rsi
+  40015b:	00 00 00 
+  40015e:	ba 1f 00 00 00       	mov    $0x1f,%edx
+  400163:	0f 05                	syscall 
+  400165:	eb 76                	jmp    4001dd <exit>
+
+0000000000400167 <_start>:
+  400167:	b8 01 00 00 00       	mov    $0x1,%eax
+  40016c:	bf 01 00 00 00       	mov    $0x1,%edi
+  400171:	48 be fe 01 40 00 00 	movabs $0x4001fe,%rsi
+  400178:	00 00 00 
+  40017b:	ba 19 00 00 00       	mov    $0x19,%edx
+  400180:	0f 05                	syscall 
+  400182:	41 b8 0a 00 00 00    	mov    $0xa,%r8d
+  400188:	e8 6a ff ff ff       	callq  4000f7 <read_number>
+  40018d:	50                   	push   %rax
+  40018e:	b8 01 00 00 00       	mov    $0x1,%eax
+  400193:	bf 01 00 00 00       	mov    $0x1,%edi
+  400198:	48 be 17 02 40 00 00 	movabs $0x400217,%rsi
+  40019f:	00 00 00 
+  4001a2:	ba 20 00 00 00       	mov    $0x20,%edx
+  4001a7:	0f 05                	syscall 
+  4001a9:	41 b8 0a 00 00 00    	mov    $0xa,%r8d
+  4001af:	e8 43 ff ff ff       	callq  4000f7 <read_number>
+  4001b4:	41 58                	pop    %r8
+  4001b6:	50                   	push   %rax
+  4001b7:	b8 01 00 00 00       	mov    $0x1,%eax
+  4001bc:	bf 01 00 00 00       	mov    $0x1,%edi
+  4001c1:	48 be ec 01 40 00 00 	movabs $0x4001ec,%rsi
+  4001c8:	00 00 00 
+  4001cb:	ba 12 00 00 00       	mov    $0x12,%edx
+  4001d0:	0f 05                	syscall 
+  4001d2:	e8 20 ff ff ff       	callq  4000f7 <read_number>
+  4001d7:	5b                   	pop    %rbx
+  4001d8:	e8 d3 fe ff ff       	callq  4000b0 <convert>
+
+00000000004001dd <exit>:
+  4001dd:	b8 3c 00 00 00       	mov    $0x3c,%eax
+  4001e2:	bf 00 00 00 00       	mov    $0x0,%edi
+  4001e7:	0f 05                	syscall 

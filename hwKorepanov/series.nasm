@@ -12,7 +12,7 @@ _start:
 	push rbp
 	mov rbp, rsp
 	sub rsp, 16
-	mov rcx, 3000000
+	mov rcx, 30
 	fldz 
 	.loop:
 		test rcx, rcx
