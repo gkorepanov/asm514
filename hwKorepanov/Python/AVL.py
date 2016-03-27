@@ -1,8 +1,7 @@
 import random
 
 class CTree:
-    depth = 0
-
+    # empty tree creation
     def __init__(self):
         self.key = None
         self.height = 0
@@ -10,12 +9,14 @@ class CTree:
 
     def insert(self, key):
 
+        # when 'imaginary' child becomes a real leaf
         if not self.key:
             self.key = key
             self.left = CTree()
             self.right = CTree()
             self.height = self.height + 1
 
+        # else go deeper:
         elif key < self.key:
             self.left.insert(key)
         elif key > self.key:
@@ -23,11 +24,15 @@ class CTree:
 
         # if key is the same, no need to add anything
 
+        # avl part
         self.rebalance()
 
     def rebalance(self):
+
+        # get new heights:
         self.update()
 
+        # and balance them properly. conditions are simple enough:
         if self.balance < -1: # right is bigger, left rotations
             if self.right.balance <= 0:
                 self.lrotate()
@@ -43,14 +48,18 @@ class CTree:
 
 
 
-    # There is really tricky and unbeautiful code, despite the meaning is pretty simple
-    # I do not know what to do with it. The problem is self is immutable.
+    # There is really tricky and unbeautiful code, 
+    # despite its meaning is pretty simple.
+    # I do not know what to do with it.
+    # The problem is that 'self' is immutable.
     
     def lrotate(self):
         newleft = CTree()
+
         newleft.left = self.left
         newleft.right = self.right.left
         newleft.key = self.key
+
         self.key = self.right.key
         self.right = self.right.right
         self.left = newleft
@@ -60,9 +69,11 @@ class CTree:
     
     def rrotate(self):
         newright = CTree()
+
         newright.right = self.right
         newright.left = self.left.right
         newright.key = self.key
+
         self.key = self.left.key
         self.left = self.left.left
         self.right = newright
@@ -81,12 +92,12 @@ class CTree:
     # get new height and balance
     def update(self):
         self.height = 1 + max(self.left.height, self.right.height)
-        self.depth = max(CTree.depth, self.height)
         self.balance = self.left.height - self.right.height
 
     # print the tree
     def dump(self, level = 0):
         if not self.key:
+            print 'EMPTY TREE'
             return
 
         if self.right.key:
