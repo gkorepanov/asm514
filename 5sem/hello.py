@@ -98,7 +98,6 @@ def auth(f):
 	return f_auth
 
 
-
 class Account:
 	x = 3
 	def __init__(self, initial_value):
