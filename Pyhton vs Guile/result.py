@@ -15,7 +15,7 @@ outf = open("result.txt", "w")
 for line in mygen:
     outf.write(line[0:-1] + " ")
     line = mygen.next()
-    outf.write(str(int(1000*float(line[2:7])))+"\n")
+    outf.write(str(reduce(lambda res, x: res + float(x), line.split(), 0)) + "\n")
 
 outf.close()
 

@@ -120,24 +120,10 @@
              (seed->random-state (+ (car time)
                                     (cdr time)))))
 
+(define (insert_numbers n range)
+  (letrec ((_insert (lambda (t k)
+     (if (= k 0) t
+      (_insert (tree_insert t (random range)) (- k 1))))))
+    (_insert '() n)))
 
-(define insert_numbers 
-    (lambda (n) 
-        (if (= n 0)
-            '()
-            (let* ((num (random 100001)) (cur_tree (insert_numbers (- n 1))))
-                (begin 
-                    ;(show cur_tree 0)
-                    ;(display num)
-                    ;(display "---------------------------------------------------")
-                    ;(newline)
-                    (tree_insert cur_tree num)
-                )
-            )
-         ;(tree_insert (insert_numbers (- n 1)) (random 100))
-        )
-    )
-)
-
-
-(show (insert_numbers (read)) 0)
+(show (insert_numbers (read) 10000000) 0)

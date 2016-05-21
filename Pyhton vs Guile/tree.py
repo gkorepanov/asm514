@@ -74,6 +74,6 @@ import random
 tree = None
 num = input()
 for key in xrange(num):
-    tree = tree_insert(tree, random.randint(0, 100000))
+    tree = tree_insert(tree, random.randint(0, 10000000-1))
 
 show(tree)
